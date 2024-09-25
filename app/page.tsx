@@ -2,12 +2,18 @@ import { AuthButton } from "@/components/auth-button";
 import { LandingNav } from "@/components/landing/landing-nav";
 import { Container } from "@/components/layout/container";
 import BoxReveal from "@/components/magicui/box-reveal";
-import Meteors from "@/components/magicui/meteors";
 import RetroGrid from "@/components/magicui/retro-grid";
-import { Button } from "@/components/ui/button";
+import { landingAuthCheck } from "@/lib/auth";
 import { ArrowRightIcon } from "lucide-react";
+import { redirect } from "next/navigation";
 
-export default function Home() {
+export default async function Home() {
+  const authCheck = await landingAuthCheck();
+  console.log(authCheck);
+  if (authCheck !== "ok") {
+    redirect(authCheck);
+  }
+
   return (
     <header className="w-full min-h-screen overflow-x-hidden">
       <Container className="relative flex flex-col">
