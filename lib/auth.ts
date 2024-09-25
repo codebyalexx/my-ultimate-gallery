@@ -27,13 +27,8 @@ export async function landingAuthCheck() {
   const session = await auth();
   console.log(session);
   if (session?.user?.id) {
-    const user = await prisma.user.findFirst({
-      where: {
-        id: session.user.id,
-      },
-    });
-
-    if (user) return "/profile-selector";
+    const anyUser = await prisma.user.findFirst({});
+    if (anyUser) return "/profile-selector";
     return "/get-started";
   } else return "ok";
 }

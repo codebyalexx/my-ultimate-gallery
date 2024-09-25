@@ -5,15 +5,28 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Loader } from "@/components/ui/loader";
 import { Separator } from "@/components/ui/separator";
 import { CheckIcon } from "lucide-react";
 import { useSession } from "next-auth/react";
+import { redirect } from "next/navigation";
 import { useState, useTransition } from "react";
+import prisma from "@/lib/prisma";
+import { makeDefaultSettings } from "@/server/actions/settings.action";
+import { createUser } from "@/server/actions/users.action";
+
+export type modulesStateType = {
+  Gallery: boolean;
+  StreamFlix: boolean;
+  NaughtyVerse: boolean;
+  DirectFans: boolean;
+};
 
 export default function Page() {
   const { data: session } = useSession();
 
   const [isLoading, startTransition] = useTransition();
+  const [error, setError] = useState("");
 
   const [displayName, setDisplayName] = useState("");
   const [email] = useState(session?.user?.email || "?@?");
@@ -155,15 +168,40 @@ export default function Page() {
 
         <div className="space-y-3">
           <Separator />
-          <div className="flex items-center justify-end w-full">
+          <div className="flex items-start justify-between w-full">
+            <span className="font-medium text-red-600">{error}</span>
             <Button
               className="flex items-center gap-2"
               disabled={isLoading}
               onClick={async () => {
-                startTransition(async () => {});
+                startTransition(async () => {
+                  /* It's clearing errors */
+                  setError("");
+
+                  /* It's checking if at least one module is enabled */
+                  let modulesOk = false;
+                  for (const moduleVal of Object.values(modules)) {
+                    if (moduleVal) modulesOk = true;
+                  }
+                  if (!modulesOk)
+                    return setError("At least one module should be enabled!");
+
+                  /* It's creating all the things in the database */
+                  await createUser({
+                    id: session?.user?.id || "",
+                    label: displayName,
+                    isAdmin: true,
+                    isConfirmed: true,
+                  });
+                  await makeDefaultSettings(modules);
+
+                  /* redirect user */
+                  await redirect("/profile-selector");
+                });
               }}
             >
-              <CheckIcon className="w-4 h-4" /> Confirm & Start using app
+              {isLoading ? <Loader /> : <CheckIcon className="w-4 h-4" />}{" "}
+              Confirm & Start using app
             </Button>
           </div>
         </div>

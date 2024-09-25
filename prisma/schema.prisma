@@ -13,6 +13,15 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Configuration {
+  id String @unique @default(cuid())
+
+  m_gallery      Boolean @default(true)
+  m_streamflix   Boolean @default(false)
+  m_naughtyverse Boolean @default(false)
+  m_directfans   Boolean @default(false)
+}
+
 model User {
   id          String  @unique
   label       String
