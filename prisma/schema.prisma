@@ -28,3 +28,37 @@ model User {
   isAdmin     Boolean @default(false)
   isConfirmed Boolean @default(false)
 }
+
+model dfans_model {
+  id            String               @unique @default(cuid())
+  name          String
+  username      String
+  bio           String
+  picturesCount Int                  @default(0)
+  videosCount   Int                  @default(0)
+  socials       dfans_model_social[]
+  medias        dfans_model_media[]
+}
+
+model dfans_model_social {
+  id        String      @unique @default(cuid())
+  type      String
+  url       String
+  avatarURL String
+  bannerURL String
+  model     dfans_model @relation(fields: [modelId], references: [id])
+  modelId   String
+}
+
+model dfans_model_media {
+  id          String      @unique @default(cuid())
+  type        String      @default("image")
+  sizeBits    Int         @default(0)
+  createdAt   DateTime    @default(now())
+  model       dfans_model @relation(fields: [modelId], references: [id])
+  modelId     String
+  extension   String
+  filename    String
+  label       String      @default("Unnamed")
+  description String      @default("")
+}
