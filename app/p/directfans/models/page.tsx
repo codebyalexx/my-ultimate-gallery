@@ -1,3 +1,9 @@
 export default function Page() {
-  return "Models";
+  return (
+    <div>
+      <div className="p-2 border-b-2 border-gray-200">
+        <h1 className="text-xl">Models</h1>
+      </div>
+    </div>
+  );
 }

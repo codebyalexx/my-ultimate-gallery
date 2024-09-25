@@ -33,7 +33,9 @@ model dfans_model {
   id            String               @unique @default(cuid())
   name          String
   username      String
-  bio           String
+  bio           String               @default("")
+  avatarURL     String
+  bannerURL     String               @default("")
   picturesCount Int                  @default(0)
   videosCount   Int                  @default(0)
   socials       dfans_model_social[]
@@ -41,13 +43,11 @@ model dfans_model {
 }
 
 model dfans_model_social {
-  id        String      @unique @default(cuid())
-  type      String
-  url       String
-  avatarURL String
-  bannerURL String
-  model     dfans_model @relation(fields: [modelId], references: [id])
-  modelId   String
+  id      String      @unique @default(cuid())
+  type    String
+  url     String
+  model   dfans_model @relation(fields: [modelId], references: [id])
+  modelId String
 }
 
 model dfans_model_media {

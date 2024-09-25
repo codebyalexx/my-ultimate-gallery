@@ -4,7 +4,7 @@ import prisma from "@/lib/prisma";
 import { User } from "@prisma/client";
 
 export const createUser = async (userData: User) => {
-  prisma.user.create({
+  await prisma.user.create({
     data: {
       id: userData.id,
       label: userData.label,

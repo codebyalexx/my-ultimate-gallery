@@ -47,7 +47,9 @@ export default function Layout({ children }: { children: ReactNode }) {
                   </Link>
                 </li>
                 <li className="pt-6">
-                  <ShinyButton>Add new model</ShinyButton>
+                  <Link href={"/p/directfans/models/create"}>
+                    <ShinyButton>Add new model</ShinyButton>
+                  </Link>
                 </li>
               </ul>
             </nav>
