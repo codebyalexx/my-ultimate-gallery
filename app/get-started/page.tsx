@@ -11,7 +11,6 @@ import { CheckIcon } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { redirect } from "next/navigation";
 import { useState, useTransition } from "react";
-import prisma from "@/lib/prisma";
 import { makeDefaultSettings } from "@/server/actions/settings.action";
 import { createUser } from "@/server/actions/users.action";
 
